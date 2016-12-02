@@ -9,8 +9,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="io.github.rohmanhakim.androidwheelpicker.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_selected_country_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selected country : " />
+        <TextView
+            android:layout_margin="8dp"
+            android:id="@+id/text_selected_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"/>
+        <Button
+            android:id="@+id/btn_pick_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick Country"/>
+    </LinearLayout>
+
 </RelativeLayout>
