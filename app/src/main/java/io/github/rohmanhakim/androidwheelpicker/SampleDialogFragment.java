@@ -67,9 +67,13 @@ public class SampleDialogFragment extends DialogFragment {
 
         wheelPicker.setItems(list);
 
+        wheelPicker.setItemsVisible(4);
+
         wheelPicker.setInitPosition(5);
 
         wheelPicker.setTextSize(30);
+
+        wheelPicker.setViewPadding(20,0,20,0);
 
 
     }

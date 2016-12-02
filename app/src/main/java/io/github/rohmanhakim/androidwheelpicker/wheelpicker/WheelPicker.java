@@ -67,7 +67,7 @@ public class WheelPicker extends View {
     int change;
 
     // 显示几个条目
-    int itemsVisible;
+    private int itemsVisible = 0;
 
     int measuredHeight;
     int measuredWidth;
@@ -108,7 +108,9 @@ public class WheelPicker extends View {
 
         lineSpacingMultiplier = 2.0F;
         isLoop = true;
-        itemsVisible = 9;
+        if(this.itemsVisible == 0){
+            this.itemsVisible = 5;
+        }
         textSize = 0;
         colorGray = 0xffafafaf;
         colorBlack = 0xff313131;
@@ -152,10 +154,14 @@ public class WheelPicker extends View {
 
         measureTextWidthHeight();
 
-        halfCircumference = (int) (maxTextHeight * lineSpacingMultiplier * (itemsVisible - 1));
+        halfCircumference = (int) (maxTextHeight * lineSpacingMultiplier * (getItemsVisible() - 1));
         measuredHeight = (int) ((halfCircumference * 2) / Math.PI);
         radius = (int) (halfCircumference / Math.PI);
         measuredWidth = maxTextWidth + paddingLeft + paddingRight;
+        //
+
+        measuredWidth = ((View)getParent()).getWidth() - paddingLeft - paddingRight;
+        //
         firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F);
         secondLineY = (int) ((measuredHeight + lineSpacingMultiplier * maxTextHeight) / 2.0F);
         if (initPosition == -1) {
@@ -302,7 +308,7 @@ public class WheelPicker extends View {
             return;
         }
 
-        String as[] = new String[itemsVisible];
+        String as[] = new String[getItemsVisible()];
         change = (int) (totalScrollY / (lineSpacingMultiplier * maxTextHeight));
         preCurrentIndex = initPosition + change % items.size();
 
@@ -325,8 +331,8 @@ public class WheelPicker extends View {
         int j2 = (int) (totalScrollY % (lineSpacingMultiplier * maxTextHeight));
         // 设置as数组中每个元素的值
         int k1 = 0;
-        while (k1 < itemsVisible) {
-            int l1 = preCurrentIndex - (itemsVisible / 2 - k1);
+        while (k1 < getItemsVisible()) {
+            int l1 = preCurrentIndex - (getItemsVisible() / 2 - k1);
             if (isLoop) {
                 while (l1 < 0) {
                     l1 = l1 + items.size();
@@ -348,7 +354,7 @@ public class WheelPicker extends View {
         canvas.drawLine(0.0F, secondLineY, measuredWidth, secondLineY, paintIndicator);
 
         int j1 = 0;
-        while (j1 < itemsVisible) {
+        while (j1 < getItemsVisible()) {
             canvas.save();
             // L(弧长)=α（弧度）* r(半径) （弧度制）
             // 求弧度--> (L * π ) / (π * r)   (弧长X派/半圆周长)
@@ -453,7 +459,7 @@ public class WheelPicker extends View {
                     int circlePosition = (int) ((l + itemHeight / 2) / itemHeight);
 
                     float extraOffset = (totalScrollY % itemHeight + itemHeight) % itemHeight;
-                    mOffset = (int) ((circlePosition - itemsVisible / 2) * itemHeight - extraOffset);
+                    mOffset = (int) ((circlePosition - getItemsVisible() / 2) * itemHeight - extraOffset);
 
                     if ((System.currentTimeMillis() - startTime) > 120) {
                         // 处理拖拽事件
@@ -468,5 +474,16 @@ public class WheelPicker extends View {
 
         invalidate();
         return true;
+    }
+
+    public int getItemsVisible() {
+        return itemsVisible;
+    }
+
+    public void setItemsVisible(int itemsVisible) {
+        if(itemsVisible % 2 != 0)
+            this.itemsVisible = itemsVisible + 2;
+        else
+            this.itemsVisible = itemsVisible + 3;
     }
 }
